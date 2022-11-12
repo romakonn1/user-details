@@ -1,0 +1,88 @@
+<section class="container">
+
+  <mat-card>
+    <mat-card-title>
+
+      <mat-tab-group mat-align-tabs="center" (selectedIndexChange)="onIndexChange($event)">
+        <mat-tab label="SIGN UP"></mat-tab>
+        <mat-tab label="SIGN IN"></mat-tab>
+      </mat-tab-group>
+      <button mat-fab color="primary"><mat-icon svgIcon="google-icon" (click)="onGoogleSignIn()"></mat-icon></button>
+
+    </mat-card-title>
+    <mat-divider></mat-divider>
+
+    <mat-card-content>
+      <form #form="ngForm" (ngSubmit)="onSubmit(form)">
+
+        <mat-form-field *ngIf="isSignUp" appearance="standard">
+          <mat-label>Full name</mat-label>
+
+          <input [(ngModel)]="user.name"
+                 minlength="3"
+                 required
+                 matInput
+                 type="text"
+                 name="name"
+                 #name="ngModel">
+
+          <mat-error *ngIf="name.errors?.['required']">Required</mat-error>
+          <mat-error *ngIf="name.errors?.['minlength']">
+            This field must have at least 3 characters.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="standard">
+          <mat-label>User name</mat-label>
+
+          <input [(ngModel)]="user.username"
+                 required
+                 matInput type="text"
+                 name="username"
+                 #username="ngModel">
+
+          <mat-error *ngIf="username.errors?.['required']">Required</mat-error>
+          <mat-error *ngIf="username.errors?.['minlength']">
+            This field must have at least 3 characters.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="standard">
+          <mat-label>Password</mat-label>
+
+          <input [(ngModel)]="user.password"
+                 required
+                 matInput type="text"
+                 name="password"
+                 #password="ngModel">
+
+          <mat-error *ngIf="password.errors?.['required']">Required</mat-error>
+          <mat-error *ngIf="password.errors?.['minlength']">
+            This field must have at least 3 characters.
+          </mat-error>
+
+          <mat-error>Required</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="standard">
+          <mat-label>Confirm Password</mat-label>
+
+          <input [(ngModel)]="user.confirmPassword"
+                 [pattern]="password.value"
+                 required
+                 matInput type="text"
+                 name="confirmPassword"
+                 #confirmPassword="ngModel">
+
+          <mat-error *ngIf="confirmPassword.errors?.['required']">Required</mat-error>
+          <mat-error *ngIf="confirmPassword.errors?.['pattern']">
+            Must match password
+          </mat-error>
+        </mat-form-field>
+
+        <button [disabled]="form.invalid" mat-raised-button color="primary" type="submit">{{ buttonTitle }}</button>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+</section>
