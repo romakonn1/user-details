@@ -10,6 +10,7 @@ import { NgxsModule } from "@ngxs/store";
 import { NgxsRouterPluginModule } from "@ngxs/router-plugin";
 import { NgxsStoragePluginModule } from "@ngxs/storage-plugin";
 import { UserState } from "./state/state";
+import { NgxsReduxDevtoolsPluginModule } from "@ngxs/devtools-plugin";
 
 @NgModule({
   declarations: [AppComponent],
@@ -19,8 +20,9 @@ import { UserState } from "./state/state";
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
-    NgxsModule.forRoot([]),
+    NgxsModule.forRoot([UserState]),
     NgxsRouterPluginModule.forRoot(),
+    NgxsReduxDevtoolsPluginModule.forRoot(),
     NgxsStoragePluginModule.forRoot({ key: UserState })
   ],
   bootstrap: [AppComponent]

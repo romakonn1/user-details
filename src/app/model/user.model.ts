@@ -5,15 +5,20 @@ export interface UserInfo {
   confirmPassword: string;
 }
 
+export interface UserStateData {
+  user: UserData;
+}
+
 export interface UserData {
-  id: string;
-  name: string;
-  email: string;
-  address?: string;
+  id?: string;
+  name?: string;
+  email?: string;
   location?: string;
-  idToken: string;
-  accessToken: string;
-  expiry: number;
+  idToken?: string;
+  accessToken?: string;
+  expiry?: number;
+  age: string;
+  address: string;
 }
 
 export interface EmployeeDataQuery {

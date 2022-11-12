@@ -1,7 +1,6 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { UserInfo } from "../../../model/user.model";
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { UserData, UserInfo } from "../../../model/user.model";
 import { NgForm } from "@angular/forms";
-import { FakeHttpService } from "../../../service/fake-http-service";
 import { GoogleAuthService } from "../../../service/google-auth/google-auth.service";
 
 @Component({
@@ -10,44 +9,15 @@ import { GoogleAuthService } from "../../../service/google-auth/google-auth.serv
   styleUrls: ['./auth.component.sass'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AuthComponent implements OnInit {
-  index = 0;
-  buttonTitle = 'Register';
-  user: UserInfo = {
-    name: '',
-    username: '',
-    password: '',
-    confirmPassword: ''
+export class AuthComponent {
+  user: UserData = {
+    age: '',
+    address: ''
   }
 
-  constructor(
-    private service: FakeHttpService,
-    private googleAuthService: GoogleAuthService,
-  ) { }
-
-  ngOnInit(): void {
-  }
+  constructor(private googleAuthService: GoogleAuthService) { }
 
   onSubmit(form: NgForm) {
-    delete form.value.confirmPassword;
-    if (this.isSignUp) {
-      this.service.signUp(form.value);
-    } else {
-      this.service.signIn(form.value);
-    }
-    form.resetForm();
-  }
-
-  onIndexChange(index: number) {
-    this.index = index;
-    this.buttonTitle = index === 0 ? 'Register' : 'Login'
-  }
-
-  get isSignUp() {
-    return this.index === 0;
-  }
-
-  onGoogleSignIn() {
-    this.googleAuthService.signIn();
+    this.googleAuthService.signIn(form.value);
   }
 }

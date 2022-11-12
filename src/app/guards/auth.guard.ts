@@ -13,20 +13,13 @@ import { UserData } from "../model/user.model";
 export class AuthGuard implements CanActivate {
   @Select(UserState) user$!: Observable<UserData>;
 
-  constructor(
-    private router: Router,
-    private googleAuthService: GoogleAuthService,
-    private store: Store
-  ) {
-  }
+  constructor(private store: Store) { }
 
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     return this.user$.pipe(switchMap((user) =>
-      user
-        ? of(true)
-        : this.store.dispatch(new Navigate(['/auth']))
+      user ? of(true) : this.store.dispatch(new Navigate(['/auth']))
     ));
   }
 }

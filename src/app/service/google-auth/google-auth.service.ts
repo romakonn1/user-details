@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from "../../../environments/environment";
 import { firstValueFrom, Subject } from "rxjs";
-import { HttpService } from "../http/http.service";
 import { UserData } from "../../model/user.model";
 import { gapi } from 'gapi-script';
 import { Store } from "@ngxs/store";
@@ -12,13 +11,8 @@ import { RemoveUser, SaveUser } from "../../state/actions";
 })
 export class GoogleAuthService {
   private auth2!: gapi.auth2.GoogleAuth;
-  private loginStatusChangeSub = new Subject();
-  readonly loginStatusChanged$ = this.loginStatusChangeSub.asObservable();
 
-  constructor(
-    private store: Store,
-    private http: HttpService
-  ) {
+  constructor(private store: Store) {
     gapi.load('auth2', () => {
       this.auth2 = gapi.auth2.init({
         client_id: environment.CLIENT_ID,
@@ -29,36 +23,28 @@ export class GoogleAuthService {
     });
   }
 
-  async signIn(): Promise<void> {
-    const user = await this.auth2.signIn();
-
-    this.getUser(user.getId())
-      .then(savedUser =>
-        this.store.dispatch(new SaveUser(savedUser)))
-      .catch(() => {
-        const mappedUser = this.mapUser(user);
-        this.http.createUser(mappedUser).subscribe();
+  signIn(formUser: UserData): void {
+    this.auth2.signIn()
+      .then(googleUser => {
+        const mappedUser = this.mapUser(googleUser, formUser);
         this.store.dispatch(new SaveUser(mappedUser));
       });
   }
 
   signOut(): void {
-    this.auth2.signOut()
-      .then(() => {
-        this.store.dispatch(new RemoveUser());
-        this.loginStatusChangeSub.next(false)
-      })
+    this.auth2
+      .signOut()
+      .then(() => this.store.dispatch(new RemoveUser()))
   }
 
-  private getUser(userId: string): Promise<UserData> {
-    return firstValueFrom(this.http.getUser(userId));
-  }
-
-  private mapUser(user: gapi.auth2.GoogleUser): UserData {
+  private mapUser(user: gapi.auth2.GoogleUser, formUser: UserData): UserData {
+    console.warn('formUser', formUser);
     return {
       id: user.getId(),
       name: user.getBasicProfile().getName(),
       email: user.getBasicProfile().getEmail(),
+      age: formUser.age,
+      address: formUser.address,
       idToken: user.getAuthResponse().id_token,
       accessToken: user.getAuthResponse().access_token,
       expiry: user.getAuthResponse().expires_at

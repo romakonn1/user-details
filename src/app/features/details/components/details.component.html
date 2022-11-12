@@ -1,0 +1,22 @@
+<ng-container *ngIf="user$ | async as user">
+
+  <header>
+    <h1>Welcome</h1>
+    <h2>Today: {{ date | date }}</h2>
+    <button mat-raised-button color="primary" (click)="onSignOut()">Sign out</button>
+  </header>
+  <main>
+    <mat-card>
+      <mat-card-title>User details</mat-card-title>
+      <mat-divider></mat-divider>
+
+      <mat-card-content>
+        <h3>Full name: {{ user.name }}</h3>
+        <h3>Email: {{ user.email }}</h3>
+        <h3>Age: {{ user.age }}</h3>
+        <h3>Address: {{ user.address }}</h3>
+      </mat-card-content>
+    </mat-card>
+  </main>
+
+</ng-container>

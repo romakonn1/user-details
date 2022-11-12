@@ -2,85 +2,50 @@
 
   <mat-card>
     <mat-card-title>
-
-      <mat-tab-group mat-align-tabs="center" (selectedIndexChange)="onIndexChange($event)">
-        <mat-tab label="SIGN UP"></mat-tab>
-        <mat-tab label="SIGN IN"></mat-tab>
-      </mat-tab-group>
-      <button mat-fab color="primary"><mat-icon svgIcon="google-icon" (click)="onGoogleSignIn()"></mat-icon></button>
-
+      Sign Up
     </mat-card-title>
     <mat-divider></mat-divider>
 
     <mat-card-content>
       <form #form="ngForm" (ngSubmit)="onSubmit(form)">
 
-        <mat-form-field *ngIf="isSignUp" appearance="standard">
-          <mat-label>Full name</mat-label>
+        <mat-form-field appearance="standard">
+          <mat-label>Age</mat-label>
 
-          <input [(ngModel)]="user.name"
-                 minlength="3"
+          <input [(ngModel)]="user.age"
+                 required
+                 min="18"
+                 max="65"
+                 matInput
+                 type="number"
+                 name="age"
+                 #age="ngModel">
+
+          <mat-error *ngIf="age.errors?.['required']">Required</mat-error>
+          <mat-error *ngIf="age.errors?.['min']">Can't be younger then 18 years old</mat-error>
+          <mat-error *ngIf="age.errors?.['max']">Can't be older then 65 years old</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="standard">
+          <mat-label>Address</mat-label>
+
+          <input [(ngModel)]="user.address"
+                 [minLength]="3"
                  required
                  matInput
                  type="text"
-                 name="name"
-                 #name="ngModel">
+                 name="address"
+                 #address="ngModel">
 
-          <mat-error *ngIf="name.errors?.['required']">Required</mat-error>
-          <mat-error *ngIf="name.errors?.['minlength']">
-            This field must have at least 3 characters.
-          </mat-error>
-        </mat-form-field>
-
-        <mat-form-field appearance="standard">
-          <mat-label>User name</mat-label>
-
-          <input [(ngModel)]="user.username"
-                 required
-                 matInput type="text"
-                 name="username"
-                 #username="ngModel">
-
-          <mat-error *ngIf="username.errors?.['required']">Required</mat-error>
-          <mat-error *ngIf="username.errors?.['minlength']">
-            This field must have at least 3 characters.
-          </mat-error>
-        </mat-form-field>
-
-        <mat-form-field appearance="standard">
-          <mat-label>Password</mat-label>
-
-          <input [(ngModel)]="user.password"
-                 required
-                 matInput type="text"
-                 name="password"
-                 #password="ngModel">
-
-          <mat-error *ngIf="password.errors?.['required']">Required</mat-error>
-          <mat-error *ngIf="password.errors?.['minlength']">
-            This field must have at least 3 characters.
-          </mat-error>
-
-          <mat-error>Required</mat-error>
-        </mat-form-field>
-
-        <mat-form-field appearance="standard">
-          <mat-label>Confirm Password</mat-label>
-
-          <input [(ngModel)]="user.confirmPassword"
-                 [pattern]="password.value"
-                 required
-                 matInput type="text"
-                 name="confirmPassword"
-                 #confirmPassword="ngModel">
-
-          <mat-error *ngIf="confirmPassword.errors?.['required']">Required</mat-error>
-          <mat-error *ngIf="confirmPassword.errors?.['pattern']">
+          <mat-error *ngIf="address.errors?.['required']">Required</mat-error>
+          <mat-error *ngIf="address.errors?.['pattern']">
             Must match password
           </mat-error>
         </mat-form-field>
 
-        <button [disabled]="form.invalid" mat-raised-button color="primary" type="submit">{{ buttonTitle }}</button>
+        <button [disabled]="form.invalid" mat-raised-button color="primary" type="submit">
+          Sign In <mat-icon svgIcon="google-icon"></mat-icon>
+        </button>
       </form>
     </mat-card-content>
   </mat-card>
